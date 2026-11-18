@@ -78,6 +78,19 @@ python scripts/run_ext.py           # 全部 21 次运行（seed 42，可 --only
 
 计时口径：同协议同输入墙钟在夜间长负载下波动 236–4712 s（非协议差异，MSA 张量形状逐位一致），故本仓库只报区间不报单点速度，见 `results/ext_results.md` 末节。
 
+## 外部对照（已发表数字，核过原文）
+
+完整对照与逐条口径差异见 [`docs/external_baselines.md`](docs/external_baselines.md)
+（2026-11-18 逐条抓取原文核对）。要点：
+
+- **Boltz-2 论文全文不报 Spearman**（检索 0 次命中）：亲和力指标是 per-assay Pearson——
+  FEP+ 4-target 子集均值 0.66、Recursion 8 盲测中 3 个 > 0.55、TYK2（Hahn 基准）R = 0.83。
+  与本仓库 within-target Spearman **统计量、集合、粒度都不同**，只作方向参照，不并表。
+- **PoseBusters 原文同样零亲和力指标**，只报 RMSD 与有效性比例——支撑本仓库 B2 把
+  "有效性"与"准确度"分开的协议设计；不存在可引的"Vina 在 PoseBusters 上的 Spearman"。
+- **DAVIS within-target Spearman 无已发表基线可引**：常被提及的 Blaese et al. 2022 与 J-DTA
+  两条一手全文均未核到（检索路线与失败事实记录在文档 §4），本仓库不引用任何未核数字。
+
 ## 数据来源与第三方声明
 
 - 蛋白序列与 pKd/Vina 真值取自 `dti-affinity-bench` 的 docking 结果切片（DAVIS 靶点/配体 + AutoDock Vina 打分 + RCSB PDB 晶体 8c7x/7ukz/6yz4）；未重新对接、未重新取数。

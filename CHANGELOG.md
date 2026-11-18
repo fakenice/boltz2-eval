@@ -6,7 +6,8 @@
 
 - 计划：补齐 `pKd = 5.0` 截断组其余 9 个配体（README「未随仓库发布」一节点名的未跑部分），
   结果无论正反并入同一张负结果表
-- 计划：外部对照表（Boltz-2 论文 / Affinity Benchmark / PoseBusters 原文数字，逐条带出处与口径差异）
+- 2026-11-18 新增 `docs/external_baselines.md`：Boltz-2 论文（Pearson 0.66/3-of-8/0.83）与
+  PoseBusters 原文数字逐条核对＋口径差异清单；Blaese/J-DTA 未核到、明确不引用；README 加「外部对照」节
 
 ## 前史（文档留痕，先于本仓库 git 历史）
 
