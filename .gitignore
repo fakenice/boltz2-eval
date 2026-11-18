@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+.venv/
+boltz_cache/
+msa/*_work*/
+.DS_Store

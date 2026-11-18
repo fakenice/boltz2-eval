@@ -1,0 +1,12 @@
+# Versions observed in the environment that produced the published results
+# (Windows, RTX 2080 Ti, CUDA 12.4 wheels).
+# torch 2.6.0 was installed from the cu124 index:
+#   pip install torch==2.6.0 --extra-index-url https://download.pytorch.org/whl/cu124
+boltz==2.0.3
+torch==2.6.0
+pytorch-lightning==2.5.0
+numpy==1.26.4
+pandas==3.0.6
+scipy==1.13.1
+biopython==1.84
+matplotlib==3.10.9
