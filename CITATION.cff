@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: >-
+  如果您使用本仓库或其公开发布的评测结果（含负结果），请引用以下元数据（README 中另有 BibTeX 条目）。
+title: "boltz2-eval：Boltz-2 蛋白-配体亲和力头的单卡严格评测（DAVIS / AutoDock Vina 子集）"
+authors:
+  - family-names: Wu
+    given-names: Yiting
+repository-code: "https://github.com/fakenice/boltz2-eval"
+url: "https://github.com/fakenice/boltz2-eval"
+license: MIT
+version: "1.0"
+date-released: "2026-11-18"

@@ -96,6 +96,20 @@ python scripts/run_ext.py           # 全部 21 次运行（seed 42，可 --only
 
 - [esm2-flu-s](https://github.com/fakenice/esm2-flu-s)：同一作者在蛋白语言模型方向的可复现实验仓库。
 
+## 引用（How to cite）
+
+本仓库以 GitHub Release v1.0 作为固定引用版本；机器可读元数据见根目录 `CITATION.cff`（GitHub 会自动在侧栏展示引用建议）。引用负结果与引用正结果同样重要。若后续分配了 DOI，请优先引用 DOI。
+
+```bibtex
+@software{wu2026boltz2eval,
+  author  = {{吴奕婷 (Yiting Wu)}},
+  title   = {boltz2-eval：Boltz-2 蛋白-配体亲和力头的单卡严格评测（DAVIS / AutoDock Vina 子集）},
+  url     = {https://github.com/fakenice/boltz2-eval},
+  version = {1.0},
+  date    = {2026-11-18}
+}
+```
+
 ## License
 
 MIT（见 `LICENSE`）。上游数据的版权归原作者与 RCSB PDB / DAVIS。
