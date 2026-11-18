@@ -1,0 +1,4 @@
+# PoseBusters validity layer only (scripts/check_posebusters.py). CPU-only.
+# Kept separate from requirements.txt so the boltz GPU env is untouched.
+# Verified environment: Python 3.13, posebusters 0.6.5 pulling rdkit 2026.09.2.
+posebusters==0.6.5

@@ -1,0 +1,31 @@
+run,group,n_lig_heavy,n_prot_atoms,min_pair_dist,n_pairs_lt_0_5A,n_pairs_lt_1_0A,n_pairs_lt_1_3A,min_lig_pro_dist,n_vdw_clashes_0_75,posebusters_load
+E1_T0013_L02069,E1,25,2178.0,0.268,24,77,112,2.98,0.0,connectivity mismatch: perceived 212 bonds vs template 28
+E1_T0013_L00261,E1,30,2166.0,0.09,27,98,176,3.038,0.0,connectivity mismatch: perceived 328 bonds vs template 33
+E1_T0013_L00349,E1,27,2187.0,0.125,13,76,136,2.879,0.0,connectivity mismatch: perceived 225 bonds vs template 29
+E1_T0013_L00585,E1,32,2184.0,0.066,53,174,287,3.03,0.0,connectivity mismatch: perceived 353 bonds vs template 34
+E1_T0013_L00602,E1,35,2188.0,0.123,41,248,423,3.497,0.0,connectivity mismatch: perceived 433 bonds vs template 42
+E1_T0013_L00772,E1,34,2188.0,0.168,25,164,291,3.156,0.0,connectivity mismatch: perceived 401 bonds vs template 37
+E1_T0013_L00808,E1,46,2192.0,0.076,75,413,670,2.796,0.0,connectivity mismatch: perceived 706 bonds vs template 51
+E1_T0013_L01149,E1,28,2185.0,0.172,31,114,207,2.439,1.0,connectivity mismatch: perceived 282 bonds vs template 31
+E1_T0013_L01163,E1,37,2185.0,0.093,55,301,481,3.156,0.0,connectivity mismatch: perceived 466 bonds vs template 41
+E1_T0013_L01299,E1,25,2181.0,0.135,17,110,185,3.115,0.0,connectivity mismatch: perceived 217 bonds vs template 28
+E1_T0013_L01320,E1,26,2179.0,0.036,16,95,163,3.425,0.0,connectivity mismatch: perceived 255 bonds vs template 30
+E2_T0004_L01091,E2,33,2386.0,0.059,43,133,237,1.588,5.0,connectivity mismatch: perceived 411 bonds vs template 37
+E2_T0004_L01149,E2,28,2382.0,0.187,35,109,177,3.193,0.0,connectivity mismatch: perceived 290 bonds vs template 31
+E2_T0015_L00602,E2,35,2311.0,0.171,43,241,389,2.419,1.0,connectivity mismatch: perceived 435 bonds vs template 42
+E2_T0015_L00770,E2,36,2313.0,0.077,26,165,293,2.48,0.0,connectivity mismatch: perceived 443 bonds vs template 39
+E2rep_T0013_L00585,E2rep,32,2189.0,0.111,48,186,294,2.836,0.0,connectivity mismatch: perceived 349 bonds vs template 34
+E3a_T0004_L01091,E3a,33,2393.0,0.021,387,525,528,1.103,139.0,connectivity mismatch: perceived 14 bonds vs template 37
+E3a_T0013_L02069,E3a,25,2191.0,0.028,179,276,295,2.247,3.0,connectivity mismatch: perceived 50 bonds vs template 28
+E3b_T0004_L01091,E3b,33,2380.0,0.045,36,147,253,2.245,7.0,connectivity mismatch: perceived 404 bonds vs template 37
+E3b_T0013_L02069,E3b,25,2186.0,0.121,26,78,138,2.734,0.0,connectivity mismatch: perceived 225 bonds vs template 28
+EQ_T0013_L02069,EQ,25,2178.0,0.268,24,77,112,2.98,0.0,connectivity mismatch: perceived 212 bonds vs template 28
+orig_T0015_L00602,orig_single_seq,35,2316.0,0.135,47,227,366,2.049,3.0,connectivity mismatch: perceived 439 bonds vs template 42
+orig_T0015_L00770,orig_single_seq,36,2320.0,0.107,39,176,309,2.817,0.0,connectivity mismatch: perceived 432 bonds vs template 39
+orig_T0004_L01091,orig_single_seq,33,2390.0,0.156,31,147,249,2.727,0.0,connectivity mismatch: perceived 408 bonds vs template 37
+orig_T0004_L01149,orig_single_seq,28,2388.0,0.083,27,107,166,2.961,0.0,connectivity mismatch: perceived 280 bonds vs template 31
+orig_T0013_L00585,orig_single_seq,32,2189.0,0.111,48,186,294,2.836,0.0,connectivity mismatch: perceived 349 bonds vs template 34
+orig_T0013_L02069,orig_single_seq,25,2190.0,0.212,22,68,101,1.5,3.0,connectivity mismatch: perceived 205 bonds vs template 28
+6yz4_1E8514A,crystal_control,33,,1.245,0,0,1,,,not attempted (control is the metric check)
+7ukz_NK3401A,crystal_control,28,,1.268,0,0,1,,,not attempted (control is the metric check)
+8c7x_TXV819A,crystal_control,34,,1.136,0,0,3,,,not attempted (control is the metric check)

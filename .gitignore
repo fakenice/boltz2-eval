@@ -4,3 +4,4 @@ __pycache__/
 boltz_cache/
 msa/*_work*/
 .DS_Store
+.venv_posebusters/
