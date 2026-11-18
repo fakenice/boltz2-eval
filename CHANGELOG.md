@@ -8,6 +8,8 @@
   结果无论正反并入同一张负结果表
 - 2026-11-18 新增 `docs/external_baselines.md`：Boltz-2 论文（Pearson 0.66/3-of-8/0.83）与
   PoseBusters 原文数字逐条核对＋口径差异清单；Blaese/J-DTA 未核到、明确不引用；README 加「外部对照」节
+- 2026-11-18 新增 `docs/DECISIONS.md`：MSA 口径更正、计时只报区间、a3m 复用、
+  B2 有效性/准确度分层、B3 置换协议等决定的仓内依据逐条登记（日期对齐 git）
 
 ## 前史（文档留痕，先于本仓库 git 历史）
 
