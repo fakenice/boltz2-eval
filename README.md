@@ -6,7 +6,7 @@
 confidence/affinity JSON + records）与确定性分析脚本随仓库发布，
 `results/ext_results.md` 可在无 GPU 条件下由已发布产物原样再生
 （本仓库提交前实测：连跑两次哈希不变；与 2026-11-17 原始记录在行尾符归一后逐字节一致，4 张分析表逐字节一致；
-`results/posebusters_geometry.csv/md` 同样连跑两次哈希不变）。
+`results/posebusters_geometry.csv/md` 与 `results/permutation.csv/md` 同样连跑两次哈希不变）。
 
 > 结论基调是**负结果 + 口径更正**，这不是失败，是这个仓库的主要价值：
 > 见下文「关键结论」与 `docs/MSA口径更正_20261117.md`。
@@ -14,14 +14,14 @@ confidence/affinity JSON + records）与确定性分析脚本随仓库发布，
 ## 目录结构
 
 ```
-scripts/            全部代码（make_yaml → make_ext_inputs → fetch_msa → run_ext → analyze_ext；check_posebusters 为姿态有效性检查）
+scripts/            全部代码（make_yaml → make_ext_inputs → fetch_msa → run_ext → analyze_ext；check_posebusters 为姿态有效性检查；permutation_test 为置换检验＋随机基线）
 data/dti_subset/    上游 docking 基准的最小切片（panel/pairs/ligands/3 个晶体 PDB）
 data/baseline/      原 6 对运行的记录行（preset=affinity-default+msa，实测为单序列，见口径更正）
 inputs/             6 个基线 YAML（msa: empty）+ 21 个本批 YAML（msa: msa/*.a3m 或 0/empty）
 msa/                MMseqs2 检索并持久化的 3 个 a3m（运行间复用，保证同构建序列同一 MSA）
 outputs/            本批 21 次运行：预测 cif、affinity/confidence JSON、processed records JSON
 outputs_baseline/   原 6 次运行：同上子集（ss_ 基线，records 里 msa_id=-1 可查）
-results/            ext_runs.csv（逐 run 指标）＋ 4 张分析表 ＋ ext_results.md ＋ posebusters_geometry.csv/md ＋ batch.log
+results/            ext_runs.csv（逐 run 指标）＋ 4 张分析表 ＋ ext_results.md ＋ posebusters_geometry.csv/md ＋ permutation.csv/md ＋ batch.log
 docs/               2026-10-14 原始报告、MSA 口径更正、three-way 判定
 ```
 
@@ -31,6 +31,7 @@ docs/               2026-10-14 原始报告、MSA 口径更正、three-way 判�
 
 ```bash
 python scripts/analyze_ext.py      # 重新生成 results/ext_results.md 与 ext_*.csv
+python scripts/permutation_test.py # 重新生成 results/permutation.csv 与 permutation.md（E1 的置换检验＋随机基线）
 ```
 
 有效性层（CPU，独立小环境，`pip install -r requirements-posebusters.txt`）：
@@ -62,6 +63,7 @@ python scripts/run_ext.py           # 全部 21 次运行（seed 42，可 --only
 | E4 | 预测复合体相对晶体的形变 | Cα Kabsch 对齐后整体与结合位点(≤5 Å)RMSD |
 | EQ | 服务器 MSA 与本地 a3m 复用是否等价 | 同复合物两路径逐指标对比 |
 | B2 | 预测配体姿态是否物理有效 | PoseBusters 口径两层：原始几何指标（最近原子对/vdW 重叠，无键级假设）＋标准装载/建图检查；共晶配体作正对照 |
+| B3 | E1 排序与随机基线能否区分 | Mantel 置换（整排 pKd、保留截断并列）双侧 p ＋零分布 |ρ| 95 分位作随机基线；n=11 与 n=6 活性子集两档 |
 
 ## 关键结论（详见 `results/ext_results.md`）
 
@@ -71,6 +73,7 @@ python scripts/run_ext.py           # 全部 21 次运行（seed 42，可 --only
 - **E3**：ptm/iptm 随 steps×recycles 单调上升（如 T0004_L01091 0.419→0.566→0.672）。
 - **E4 负结果**：对晶体 Cα RMSD 全部组合整体 18.5–23.7 Å，结合位点 12.7–24.1 Å——短构建序列、无模板输入下 Boltz-2 复合体姿态与晶体差很大；真实 MSA 档的 CA pLDDT 均值约 33–46，不足以自洽预警这种偏差。
 - **B2 负结果（姿态有效性）**：27/27 个预测（含 6 个单序列基线）的配体原子云中都存在 0.02–0.27 Å 的原子对——低于任何真实共价键一个量级；共晶配体正对照同一指标 1.14–1.27 Å，排除解析伪影。按 PoseBusters 协议从坐标感知连通图并做模板键级赋值，0/27 能建成合法分子图（全部卡在装载层）。与 E1/E4 负结果互相印证：该配置下 affinity 头输出的复合体姿态整体不物理。明细 `results/posebusters.md`。
+- **B3 负结果（统计口径补强）**：Mantel 置换（20000 次、seed 42、+1 校正）下 Boltz-2 亲和力 ρ=−0.543 双侧 p=0.0848、Vina ρ=−0.286 p=0.3853、二元结合概率 ρ=+0.353 p=0.2715——均不过 0.05；且 n=11 时随机排序有 5% 概率碰出 |ρ|≥0.610，三个观测 |ρ|（0.543/0.286/0.353）都在这条线以下 ⇒ 与随机排序不可区分（与 E1 bootstrap CI 跨 0 同一事实的 p 值表述）。两个方向都不构成「显著差于/优于随机」的证据；n=6 活性子集仅给粗判（详见 `results/permutation.md`）。
 - **口径更正（本批起因）**：原 6 对 YAML 写了 `msa: empty`，该字段解析为 `msa_id=-1` 且**优先于** `--use_msa_server`（schema.py L1118 / main.py L517-529），records 证实——原以为是真实 MSA 的运行实为单序列。发布件里 `outputs_baseline/*/*/processed/records/` 可自查。
 
 计时口径：同协议同输入墙钟在夜间长负载下波动 236–4712 s（非协议差异，MSA 张量形状逐位一致），故本仓库只报区间不报单点速度，见 `results/ext_results.md` 末节。
