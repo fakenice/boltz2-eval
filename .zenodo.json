@@ -1,0 +1,24 @@
+{
+  "title": "boltz2-eval：Boltz-2 蛋白-配体亲和力头的单卡严格评测（DAVIS / AutoDock Vina 子集）",
+  "version": "v1.0",
+  "publication_date": "2026-11-18",
+  "upload_type": "software",
+  "language": "zh",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Wu, Yiting"
+    }
+  ],
+  "description": "<p>Single-GPU (11 GB) strict evaluation of Boltz-2's affinity-prediction head on a DAVIS / AutoDock Vina subset: real persisted MSA, same-condition Vina control, Mantel permutation test (20,000 permutations), PoseBusters reference-free pose checks, and CPU-regenerable analysis. Headline is a negative result (no same-target ranking established; 0/27 poses pass loading checks) published with its confidence intervals.</p><p>boltz2-eval：单张 11 GB 卡部署 Boltz-2 并接入真实 MSA 的严格评测；同靶点排序未建立（负结果如实公开），全部原始输出与确定性分析脚本随仓库发布。</p>",
+  "keywords": [
+    "Boltz-2",
+    "protein-ligand",
+    "binding affinity",
+    "docking",
+    "PoseBusters",
+    "permutation test",
+    "evaluation",
+    "negative results"
+  ]
+}
