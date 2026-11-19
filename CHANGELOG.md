@@ -27,6 +27,11 @@
   `ext_results.md` 的 E1 表加 `batch` 列并新增方向口径段与补齐批计时段。
   文档：README E1/B2/B3/E4/计时/未发布清单同步更新，并把 B2 与 E1 之间改为「未解释的矛盾」表述；
   `docs/DECISIONS.md` 加第 9–12 条、第 4 条计时区间补白天批
+- 2026-11-20 方向口径更正落到早期文档：新增 `docs/方向口径更正_20261120.md`
+  （6 点三组逐组重判：Boltz-2 由「对 2 错 1」变为「对 1 错 2」，Vina 与二分类头标注不受影响；
+  核定过程与两次失败的自查一并留痕）；`docs/报告_…_20261014.md` 与 `docs/three_way_verdict.md`
+  正文一字不动，各加一行补记指向该文件（沿用「早期措辞不撤回、以更正文档为准」的先例）；
+  `docs/DECISIONS.md` 加第 13 条
 - 2026-11-18 新增 `docs/external_baselines.md`：Boltz-2 论文（Pearson 0.66/3-of-8/0.83）与
   PoseBusters 原文数字逐条核对＋口径差异清单；Blaese/J-DTA 未核到、明确不引用；README 加「外部对照」节
 - 2026-11-18 新增 `docs/DECISIONS.md`：MSA 口径更正、计时只报区间、a3m 复用、
