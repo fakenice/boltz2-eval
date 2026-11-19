@@ -1,10 +1,18 @@
 """Analyze the Boltz-2 extension experiments. Reads only real run outputs.
 
 E1  within-BRAF ranking: Spearman of Boltz-2 affinity vs measured pKd, and of
-    Vina (-score) vs pKd, on the same 11 ligands; bootstrap 95% CI (2000 resamples,
-    seed 42). Also the active-only subset (pKd > 5.0). Absolute affinity values
-    are NOT comparable to pKd (scale mismatch documented in the 10-14 report);
-    only within-target ordering is graded.
+    Vina (-score) vs pKd, on every E1 ligand; bootstrap 95% CI (2000 resamples,
+    seed 42). Reported on three subsets (scripts/e1_subsets.py): the full set
+    (n=20 since 2026-11-20, when the pKd == 5.0 truncation group was completed),
+    the published 2026-11-17 subset (n=11) and the active-only subset (pKd > 5.0).
+    Absolute affinity values are NOT comparable to pKd (scale mismatch documented
+    in the 10-14 report); only within-target ordering is graded. Sign convention,
+    taken from the upstream docs on 2026-11-20 (jwohlwend/boltz docs/prediction.md,
+    "Output"): affinity_pred_value is log10(IC50) with IC50 in µM and "lower values
+    indicate stronger predicted binding", while pKd grows with affinity — so a
+    NEGATIVE rho(affinity, pKd) is the direction that means the model works. For
+    Vina (a score, lower = tighter; the table uses its negation) and for the binary
+    binder probability (higher = more binder), the working direction is positive.
 E2  MSA ablation (corrected protocol): the original probe "affinity-default+msa"
     runs were actually SINGLE-SEQUENCE (YAML msa: empty -> msa_id=-1 overrides
     --use_msa_server; records confirm). Real-MSA side = E1 BRAF runs + E2 runs
@@ -22,7 +30,9 @@ EQ  protocol equivalence: server-MSA run (msa auto + --use_msa_server) vs the
     local-a3m run of the same complex.
 
 Repository layout vs the local working copy (paths only):
-  results/ext_runs.csv         this batch, 21 runs (appended by run_ext.py)
+  results/ext_runs.csv         every extension run (appended by run_ext.py; 21 on
+                               2026-11-17/18, 30 once the 9 truncated-group ligands
+                               landed on 2026-11-20)
   data/baseline/probe_all.csv  the 6 original preset=affinity-default+msa rows
                                (extracted from the local probe_all.csv, columns
                                unchanged)
@@ -35,6 +45,7 @@ from __future__ import annotations
 
 import os
 import pathlib
+import sys
 
 import numpy as np
 import pandas as pd
@@ -42,6 +53,8 @@ from scipy import stats
 
 HERE = pathlib.Path(__file__).resolve().parent
 ROOT = HERE.parent
+sys.path.insert(0, str(HERE))
+from e1_subsets import PUBLISHED_E1, subsets as e1_subsets  # noqa: E402
 BENCH = pathlib.Path(os.environ.get("DTI_BENCH", str(ROOT / "data" / "dti_subset")))
 STRUCT_DIR = BENCH / "data" / "raw" / "docking"
 RESULTS = ROOT / "results"
@@ -195,21 +208,36 @@ def main() -> None:
 
     # ---- E1 ranking ----
     e1 = runs[runs.exp == "E1"].copy()
-    lines += ["## E1 BRAF 同靶点排序（n=%d，其中 pKd>5.0 共 %d）" % (len(e1), (e1.true_pkd > 5).sum()), ""]
+    lines += ["## E1 BRAF 同靶点排序（n=%d，其中 pKd>5.0 共 %d；截断组 n=%d）"
+              % (len(e1), (e1.true_pkd > 5).sum(), (e1.true_pkd == 5).sum()), ""]
     if len(e1):
-        tab = e1.sort_values("true_pkd", ascending=False)[
-            ["ligand_id", "true_pkd", "vina_best", "affinity_pred", "binary_bind_prob", "ptm", "iptm"]]
-        lines += [md_table(tab), ""]
-        for label, sub in [("全部配体", e1), ("pKd>5.0 子集", e1[e1.true_pkd > 5.0])]:
+        e1["batch"] = ["2026-11-17" if n in PUBLISHED_E1 else "2026-11-20"
+                       for n in e1["name"]]
+        tab = e1.sort_values(["true_pkd", "vina_best"], ascending=[False, True])[
+            ["ligand_id", "true_pkd", "vina_best", "affinity_pred", "binary_bind_prob",
+             "ptm", "iptm", "batch"]]
+        lines += [md_table(tab), "",
+                  "batch 列标明每行来自哪一批：2026-11-17 ＝ 首批（6 活性 + Vina 最强 5 截断，"
+                  "即 README 长期引用的 n=11）；2026-11-20 ＝ 补齐 pKd=5.0 截断组的其余 9 个配体，"
+                  "使并列组不再是被挑过的一半。两批同协议（本地 a3m、默认结构档、亲和力头默认 5×200、seed 42）。", ""]
+        for key, (label, sub) in e1_subsets(e1).items():
             rb, cb, nb = boot_spearman(sub.affinity_pred, sub.true_pkd)
             rv, cv, nv = boot_spearman(-sub.vina_best, sub.true_pkd)
             rp, cp, np_ = boot_spearman(sub.binary_bind_prob, sub.true_pkd)
-            lines.append(f"- {label}（n={nb}）：Boltz-2 亲和力 vs pKd Spearman **{rb:+.3f}** [{cb[0]:+.3f}, {cb[1]:+.3f}]；"
-                         f"Vina vs pKd **{rv:+.3f}** [{cv[0]:+.3f}, {cv[1]:+.3f}]；"
-                         f"二分类结合概率 vs pKd {rp:+.3f} [{cp[0]:+.3f}, {cp[1]:+.3f}]")
+            lines.append(f"- {label}（n={nb}）：Boltz-2 亲和力 vs pKd Spearman **{rb:+.3f}** [{cb[0]:+.3f}, {cb[1]:+.3f}]（负＝正确方向）；"
+                         f"Vina vs pKd **{rv:+.3f}** [{cv[0]:+.3f}, {cv[1]:+.3f}]（正＝正确方向）；"
+                         f"二分类结合概率 vs pKd {rp:+.3f} [{cp[0]:+.3f}, {cp[1]:+.3f}]（正＝正确方向）")
         lines += ["", "口径：pKd 为 pairs.csv 同一配体多行的均值（与 10-14 报告一致）；5.0 是 DAVIS Kd 截断上限，"
-                  "并列按 Spearman 默认处理；亲和力绝对值与 pKd 尺度不可比，只评同靶点内排序。", ""]
-        e1.to_csv(RESULTS / "ext_ranking.csv", index=False)
+                  "并列按 Spearman 默认处理；亲和力绝对值与 pKd 尺度不可比，只评同靶点内排序。", "",
+                  "方向口径（2026-11-20 依官方文档核定）：Boltz-2 的 `affinity_pred_value` 是 log10(IC50)"
+                  "（IC50 以 μM 计），官方原文 “Lower values indicate stronger predicted binding”"
+                  "（jwohlwend/boltz `docs/prediction.md`「Output」节，2026-11-20 取）。pKd 越大结合越强，"
+                  "⇒ **亲和力字段与 pKd 呈负相关才是正确方向**；Vina 输出是打分（越负越强，上表已取相反数）、"
+                  "二分类字段是 binder 概率（越大越强），二者与 pKd 呈正相关才是正确方向。"
+                  "首版（n=11）只判「区间是否跨 0」、未对符号下结论，此处把符号口径写进产物，避免后续误读。", ""]
+        # ext_ranking.csv keeps its published columns; batch membership lives in
+        # scripts/e1_subsets.py so the n=11 artifact stays byte-identical.
+        e1.drop(columns=["batch"]).to_csv(RESULTS / "ext_ranking.csv", index=False)
 
     # ---- EQ equivalence: server MSA vs local a3m reuse ----
     lines += ["## EQ 服务器 MSA vs 本地 a3m 复用（协议等价性）", ""]
@@ -308,8 +336,18 @@ def main() -> None:
                 & (runs.msa_mode.isin(["local_a3m", "server"]))]
     lo, hi = braf.seconds.min(), braf.seconds.max()
     lo_name, hi_name = braf.loc[braf.seconds.idxmin(), "name"], braf.loc[braf.seconds.idxmax(), "name"]
-    assert lo_name == "EQ_T0013_L02069" and hi_name == "E1_T0013_L00349", (lo_name, hi_name)
+    # The 3:15-vs-1:14:58 progress-bar evidence quoted below belongs to the slowest
+    # run, so that run has to stay the maximum; the minimum is whichever run happens
+    # to be fastest and is only named through lo_name.
+    assert hi_name == "E1_T0013_L00349", hi_name
+    assert hi / lo >= 15, (lo_name, lo, hi_name, hi)
     mid = runs.loc[runs.name == "E1_T0013_L00602", "seconds"].iloc[0]
+    # The completion batch is defined by the experiment id, not by the 8c7x/default
+    # slice above: that slice also contains the server-MSA EQ run, which belongs to
+    # the 2026-11-17 night batch and must not be counted as a new ligand.
+    new_e1 = runs[(runs.exp == "E1") & (~runs["name"].isin(PUBLISHED_E1))]
+    assert len(new_e1) == 9, len(new_e1)
+    assert set(new_e1["name"]) <= set(braf["name"]), set(new_e1["name"]) - set(braf["name"])
     peaks = runs[runs.msa_mode == "local_a3m"].peak_gpu_MiB
     lines += ["## 计时口径说明（实测核查）", "",
               "同协议同输入（274 aa、同一 8192 条 MSA 张量、seed 42、默认档）的单对墙钟耗时在本批内波动极大：",
@@ -317,7 +355,11 @@ def main() -> None:
               "3:15 vs 1:14:58）。各 run 的 MSA npz 形状完全一致（sequences 8192 / residues 2244608），",
               "EQ 与 E1 同复合物结果逐位相同 ⇒ 计算内容相同，耗时差异来自系统级因素（夜间长时负载下的 GPU 降频",
               f"或后台进程争用，未单独确证），不是协议差异。因此：真实 MSA 档单对耗时只能报区间（约 {lo/60:.0f}–{hi/60:.0f} 分钟），",
-              f"不得引用单点值作速度结论；峰值显存稳定在 {peaks.min():.0f}–{peaks.max():.0f} MiB（11 GB 卡上限附近），{len(runs)}/{len(runs)} 全部产出、无 OOM。"]
+              f"不得引用单点值作速度结论；峰值显存稳定在 {peaks.min():.0f}–{peaks.max():.0f} MiB（11 GB 卡上限附近），{len(runs)}/{len(runs)} 全部产出、无 OOM。",
+              "",
+              f"补齐批（2026-11-20，本机 {len(new_e1)} 跑，独占显卡、白天连跑）耗时 "
+              f"{new_e1.seconds.min():.0f}–{new_e1.seconds.max():.0f} s，全部落在 2026-11-17 夜间批的上界之下；",
+              "这与「慢档来自夜间长时负载下的降频或争用」一致，但仍是相关而非因果，且不构成速度结论。"]
 
     (RESULTS / "ext_results.md").write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
     try:

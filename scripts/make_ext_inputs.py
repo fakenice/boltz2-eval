@@ -117,9 +117,19 @@ def main() -> None:
             .groupby("ligand_id", as_index=False)
             .agg(pkd=("pkd", "mean"), vina_best=("vina_best", "mean")))
     active = braf[braf.pkd > 5.0]
-    trunc = braf[braf.pkd == 5.0].sort_values("vina_best").head(5)
-    sel = pd.concat([active, trunc])
-    print(f"E1 selection: {len(active)} active + {len(trunc)} truncated = {len(sel)}")
+    trunc_all = braf[braf.pkd == 5.0].sort_values("vina_best")
+    # The 2026-11-17 batch ran only the 5 strongest-Vina truncated rows (the
+    # adversarial subset). trunc_rest are the remaining 9 pKd == 5.0 ligands,
+    # added 2026-11-20 so the truncated group is complete rather than curated;
+    # they stay in the same E1 group because the question is "can Boltz-2 rank
+    # within BRAF at all", and a hand-picked half of a tie group is an answer
+    # that cannot be re-asked. Analyses must keep reporting the published
+    # n=11 subset separately (see scripts/permutation_test.py).
+    trunc = trunc_all.head(5)
+    trunc_rest = trunc_all.iloc[5:]
+    sel = pd.concat([active, trunc, trunc_rest])
+    print(f"E1 selection: {len(active)} active + {len(trunc)} truncated (2026-11-17) "
+          f"+ {len(trunc_rest)} truncated (2026-11-20) = {len(sel)}")
     for r in sel.itertuples():
         add(f"E1_T0013_{r.ligand_id}", "E1", "T0013", r.ligand_id, "msa/T0013.a3m")
 

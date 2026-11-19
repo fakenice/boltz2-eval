@@ -40,3 +40,45 @@
 >> EQ_T0013_L02069 (EQ, msa=server)
    236s peak 10993 MiB affinity=-1.1891727447509766 ptm=0.6408424973487854 iptm=0.739331066608429
 ALL DONE
+
+# ==== 2026-11-20 补齐批：pKd=5.0 截断组其余 9 个配体（同协议：本地 a3m、默认结构档、亲和力头 5×200、seed 42）====
+>> E1_T0013_L00078 (E1, msa=local_a3m)
+   543s peak 10901 MiB affinity=0.996783971786499 ptm=0.6443887948989868 iptm=0.753739058971405
+== E1_T0013_L00261: already done, skip
+== E1_T0013_L00349: already done, skip
+>> E1_T0013_L00373 (E1, msa=local_a3m)
+   427s peak 11015 MiB affinity=0.9620377421379089 ptm=0.6148796677589417 iptm=0.7267045378684998
+>> E1_T0013_L00489 (E1, msa=local_a3m)
+   271s peak 11005 MiB affinity=0.002945736050605774 ptm=0.6956223249435425 iptm=0.7808660864830017
+>> E1_T0013_L00550 (E1, msa=local_a3m)
+   235s peak 10987 MiB affinity=0.8484559059143066 ptm=0.5181871056556702 iptm=0.5879961252212524
+== E1_T0013_L00585: already done, skip
+== E1_T0013_L00602: already done, skip
+>> E1_T0013_L00727 (E1, msa=local_a3m)
+   226s peak 10997 MiB affinity=0.6614881753921509 ptm=0.6118664741516113 iptm=0.7040159106254578
+>> E1_T0013_L00770 (E1, msa=local_a3m)
+   287s peak 10995 MiB affinity=-0.18344146013259888 ptm=0.6209964156150818 iptm=0.7139480710029602
+== E1_T0013_L00772: already done, skip
+== E1_T0013_L00808: already done, skip
+>> E1_T0013_L00836 (E1, msa=local_a3m)
+   252s peak 10999 MiB affinity=-0.2521400451660156 ptm=0.7056732177734375 iptm=0.7580080628395081
+>> E1_T0013_L00914 (E1, msa=local_a3m)
+   237s peak 10999 MiB affinity=0.16141965985298157 ptm=0.6445930004119873 iptm=0.7133318781852722
+>> E1_T0013_L01091 (E1, msa=local_a3m)
+   261s peak 10997 MiB affinity=-0.461997926235199 ptm=0.6084869503974915 iptm=0.7065496444702148
+== E1_T0013_L01149: already done, skip
+== E1_T0013_L01163: already done, skip
+== E1_T0013_L01299: already done, skip
+== E1_T0013_L01320: already done, skip
+== E1_T0013_L02069: already done, skip
+== E2_T0004_L01091: already done, skip
+== E2_T0004_L01149: already done, skip
+== E2_T0015_L00602: already done, skip
+== E2_T0015_L00770: already done, skip
+== E2rep_T0013_L00585: already done, skip
+== E3a_T0004_L01091: already done, skip
+== E3a_T0013_L02069: already done, skip
+== E3b_T0004_L01091: already done, skip
+== E3b_T0013_L02069: already done, skip
+== EQ_T0013_L02069: already done, skip
+ALL DONE

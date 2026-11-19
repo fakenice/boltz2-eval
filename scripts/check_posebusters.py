@@ -1,8 +1,9 @@
 """B2: PoseBusters validity checks on the published Boltz-2 predictions.
 
 CPU only. Reads only repository files: the predicted complex cif under
-outputs/<name>/ (21 batch runs) and outputs_baseline/msa_<name>/ (6 original
-single-sequence runs), plus the input SMILES in inputs/<name>.yaml.
+outputs/<name>/ (30 batch runs since 2026-11-20; 21 on 2026-11-17/18) and
+outputs_baseline/msa_<name>/ (6 original single-sequence runs), plus the input
+SMILES in inputs/<name>.yaml.
 
 Two layers, reported separately because they rest on different assumptions:
 
@@ -247,8 +248,12 @@ def main() -> None:
 
     runs_geo = geo[geo.group != "crystal_control"]
     ctrl = geo[geo.group == "crystal_control"]
-    lines = ["# B2 PoseBusters 有效性检查（2026-11-18，CPU，全部读仓库内已发布产物）", "",
-             "对象：21 个本批预测（E1/E2/E3a/E3b/EQ）＋6 个原单序列基线（orig_），各 model_0 唯一姿态；"
+    # Counts come from the rows just computed, so the header cannot fall behind a
+    # re-run that covers more predictions than the 2026-11-18 first version did.
+    n_batch = int((~runs_geo.group.isin(["orig_single_seq", "crystal_control"])).sum())
+    n_base = int((runs_geo.group == "orig_single_seq").sum())
+    lines = ["# B2 PoseBusters 有效性检查（2026-11-18 首版，2026-11-20 随 E1 截断组补齐重跑，CPU，全部读仓库内已发布产物）", "",
+             f"对象：{n_batch} 个本批预测（E1/E2/E3a/E3b/EQ）＋{n_base} 个原单序列基线（orig_），各 model_0 唯一姿态；"
              "另以 3 个已发布 PDB 的共晶配体作指标正对照（crystal_control）。",
              "", "## 第一层：原始几何（不依赖键级感知）", ""]
     n_bad = int((runs_geo.min_pair_dist < 1.0).sum())
@@ -258,7 +263,8 @@ def main() -> None:
               f"- 配体-蛋白范德华重叠（d < 0.75·(r_i+r_j)）总数：{int(runs_geo['n_vdw_clashes_0_75'].sum())}，"
               f"涉及 {int((runs_geo['n_vdw_clashes_0_75'] > 0).sum())}/{len(runs_geo)} 个运行",
               f"- 正对照（同一指标作用于共晶配体；其最近原子对即最短共价键，1.1–1.3 Å 量级）：{ctrl_txt}，"
-              "全部 ≥1.0 Å，而 27 个预测的最近原子对为 0.02–0.27 Å——低于任何真实键长一个量级，"
+              f"全部 ≥1.0 Å，而 {len(runs_geo)} 个预测的最近原子对为 "
+              f"{runs_geo.min_pair_dist.min():.2f}–{runs_geo.min_pair_dist.max():.2f} Å——低于任何真实键长一个量级，"
               "崩塌来自模型输出，不是解析或指标伪影",
               "", "逐运行明细见 `posebusters_geometry.csv`（列：最近原子对距离、<0.5/1.0/1.3 Å 对数、"
               "配体-蛋白最小距离、vdW 重叠对数、PoseBusters 装载结果）。", ""]

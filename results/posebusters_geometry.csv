@@ -20,6 +20,15 @@ E3a_T0013_L02069,E3a,25,2191.0,0.028,179,276,295,2.247,3.0,connectivity mismatch
 E3b_T0004_L01091,E3b,33,2380.0,0.045,36,147,253,2.245,7.0,connectivity mismatch: perceived 404 bonds vs template 37
 E3b_T0013_L02069,E3b,25,2186.0,0.121,26,78,138,2.734,0.0,connectivity mismatch: perceived 225 bonds vs template 28
 EQ_T0013_L02069,EQ,25,2178.0,0.268,24,77,112,2.98,0.0,connectivity mismatch: perceived 212 bonds vs template 28
+E1_T0013_L00078,E1,40,2175.0,0.113,50,279,474,3.336,0.0,connectivity mismatch: perceived 572 bonds vs template 45
+E1_T0013_L00373,E1,29,2191.0,0.18,15,83,155,2.444,0.0,connectivity mismatch: perceived 293 bonds vs template 31
+E1_T0013_L00489,E1,35,2186.0,0.106,62,308,437,2.155,1.0,connectivity mismatch: perceived 384 bonds vs template 40
+E1_T0013_L00550,E1,19,2182.0,0.243,4,29,48,2.499,1.0,connectivity mismatch: perceived 95 bonds vs template 21
+E1_T0013_L00727,E1,26,2177.0,0.159,31,82,142,2.534,0.0,connectivity mismatch: perceived 232 bonds vs template 29
+E1_T0013_L00770,E1,36,2189.0,0.107,32,180,304,2.299,1.0,connectivity mismatch: perceived 424 bonds vs template 39
+E1_T0013_L00836,E1,31,2187.0,0.049,29,123,211,2.58,0.0,connectivity mismatch: perceived 335 bonds vs template 34
+E1_T0013_L00914,E1,27,2179.0,0.161,19,108,188,3.134,0.0,connectivity mismatch: perceived 265 bonds vs template 29
+E1_T0013_L01091,E1,33,2186.0,0.155,30,154,266,3.055,0.0,connectivity mismatch: perceived 404 bonds vs template 37
 orig_T0015_L00602,orig_single_seq,35,2316.0,0.135,47,227,366,2.049,3.0,connectivity mismatch: perceived 439 bonds vs template 42
 orig_T0015_L00770,orig_single_seq,36,2320.0,0.107,39,176,309,2.817,0.0,connectivity mismatch: perceived 432 bonds vs template 39
 orig_T0004_L01091,orig_single_seq,33,2390.0,0.156,31,147,249,2.727,0.0,connectivity mismatch: perceived 408 bonds vs template 37
